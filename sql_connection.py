@@ -1,19 +1,22 @@
 import mysql.connector
 from sqlalchemy import create_engine
-import pandas as pd
 import requests
 
 DB_NAME = "ncaafb_db"
 SCHEMA_FILE = "schema.sql"
+HOST_ID = "localhost"
+USER_NAME = "root"
+USER_PASSWORD = "root"
+
 
 def connect_root():
     return mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="root"
+        host=HOST_ID,
+        user=USER_NAME,
+        password=USER_PASSWORD
     )
 
-def apply_schema(cursor):
+def _apply_schema(cursor):
     print(f"Creating {DB_NAME}", f"Loading schema file from ./{SCHEMA_FILE}", sep="\n")
     with open(SCHEMA_FILE) as f: schema = f.read()
     for stmt in schema.split(";"):
@@ -25,7 +28,7 @@ def ensure_database(cursor):
     cursor.execute("SHOW DATABASES;")
     dbs = [db[0] for db in cursor.fetchall()]
     if DB_NAME not in dbs:
-        apply_schema(cursor)
+        _apply_schema(cursor)
     print(f"Accessing {DB_NAME} database...")
     cursor.execute(f"USE {DB_NAME};")
 
@@ -41,11 +44,11 @@ def main():
 
     ensure_database(cursor)
 
-    engine = create_engine(f"mysql+mysqlconnector://root:root@localhost/{DB_NAME}")
+    # engine = create_engine(f"mysql+mysqlconnector://root:root@localhost/{DB_NAME}")
 
-    users = fetch_api("https://api.example.com/users")
-    df_users = pd.json_normalize(users)
-    insert_incremental(df_users, "users", engine)
+    # users = fetch_api("https://api.example.com/users")
+    # df_users = pd.json_normalize(users)
+    # insert_incremental(df_users, "users", engine)
 
     conn.close()
 

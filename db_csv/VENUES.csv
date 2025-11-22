@@ -1,0 +1,53 @@
+venue_id,name,city,state,country,zip,address,capacity,surface,roof_type,latitude,longitude
+5189127d-ea58-4917-84b8-8456f3abb8b2,Jerry Richardson Stadium,Charlotte,NC,USA,28262,9201 University City Boulevard,15314,artificial,outdoor,35.3105,-80.7401
+170baa73-abb9-4247-8aea-190c51233841,Aggie Memorial Stadium,Las Cruces,NM,USA,88003,1810 E University Avenue,30343,artificial,outdoor,32.2795,-106.7417
+7d20b630-56c3-11ec-9281-217a369cffb1,Snapdragon Stadium,San Diego,CA,USA,92108,9449 Friars Road,35000,turf,outdoor,32.7841,-117.1224
+acb633c4-e7e7-4ee1-b539-07b05a2ac5d4,Truist Stadium,Greensboro,NC,USA,27411,1601 E Market Street,21500,turf,outdoor,36.0814,-79.7700
+ef6e4242-101e-44d9-b2c4-e93eb9e6ebf7,UC Davis Health Stadium,Davis,CA,USA,95616,La Rue Road,10743,artificial,outdoor,38.5366,-121.7628
+005c634f-8de4-4b05-9dee-3e56c31b255b,Merlin Olsen Field at Maverik Stadium,Logan,UT,USA,84322,1000 North 800 East,25100,artificial,outdoor,41.7517,-113.0773
+bdd846b5-b655-4ac5-b433-fa24a91f3fe5,Arute Field,New Britain,CT,USA,06050,1615 Stanley Street,5500,artificial,outdoor,41.6951,-72.7616
+898e9169-9370-4c2c-a4df-48dec30e89e0,Bailey Memorial Stadium,Clinton,SC,USA,29325,State Rd S-30-71,6500,turf,outdoor,34.4616,-81.8614
+4eabf6a3-e956-466c-9e19-95d03fb2f325,Frank Solich Field at Peden Stadium,Athens,OH,USA,45701,Richland Avenue & South Green Drive,24000,artificial,outdoor,39.3210,-82.1030
+b07ff7f8-8aad-4249-970b-6a65032e6f04,"Johnny ""Red"" Floyd Stadium",Murfreesboro,TN,USA,37132,1327 Faulkinberry Drive,30788,artificial,outdoor,35.8513,-86.3682
+12f10ec4-49ec-4e2b-ae32-d913c2137ebd,Blue Raider Stadium,Columbia,KY,USA,42728,928 Russell Road,1500,turf,outdoor,35.8506,-86.3676
+d80a63f2-ce57-4312-833d-72bf8ba6f1b5,Drake Stadium (IA),Des Moines,IA,USA,50311,2719 Forest Avenue,14557,artificial,outdoor,41.6050,-93.6551
+a338a835-dd2b-4723-a886-d761bbaf491d,Stanford Stadium,Stanford,CA,USA,94305,625 Nelson Road,50424,turf,outdoor,37.4345,-122.1611
+11833950-c0a5-4188-8a82-b5488211ca80,Raymond James Stadium,Tampa,FL,USA,33607,4201 North Dale Mabry Highway,69218,turf,outdoor,27.9759,-82.5033
+9dce8c9b-13c6-41a7-a280-4d8993a594f3,UB Stadium,Buffalo,NY,USA,14260,102 Alumni Arena,25013,artificial,outdoor,42.9992,-78.7775
+12f36dc5-090d-413c-8330-da761d3a1bcb,Roy Kidd Stadium,Richmond,KY,USA,40475,Roy and Sue Kidd Way,20000,artificial,outdoor,37.7345,-84.2977
+6c656e44-7186-4da9-adfe-0d341bcacf86,"Memorial Stadium (Lincoln, NE)",Lincoln,NE,USA,68508,600 Stadium Drive,85458,artificial,outdoor,40.8207,-96.7056
+00828546-ccd4-4f57-89b5-3ceeee59b6df,Manning Field at John L. Guidry Stadium,Thibodaux,LA,USA,70301,906 E 1st Street,10500,artificial,outdoor,29.7851,-90.8024
+7552087d-9bab-4959-b92f-dc657441168c,Joe Walton Stadium,Moon Township,PA,USA,15108,1504 Woodcrest Avenue,3000,artificial,outdoor,40.5211,-80.2162
+2f49d92d-c734-4794-bcd5-f830138ae93d,FirstBank Stadium,Nashville,TN,USA,37240,2601 Jess Neely Drive,40550,artificial,outdoor,36.1439,-86.8089
+cd3055c9-e9df-40c2-ba06-9bef851db7a5,Jayne Stadium,Morehead,KY,USA,40351,150 University Boulevard,10000,artificial,outdoor,38.1919,-83.4254
+d3191a90-4fa2-4201-9713-e60118c2eac7,Allen E. Paulson Stadium,Statesboro,GA,USA,30458,207 Lanier Drive,25000,artificial,outdoor,32.4122,-81.7831
+ae3177a3-ec09-4fc6-b020-d2d1de8aa385,O'Kelly-Riddick Stadium,Durham,NC,USA,27707,1801 Fayetteville Street,10000,artificial,outdoor,35.9739,-78.8970
+d99f6e35-5322-474f-a256-9ef5f7f077c8,California Memorial Stadium,Berkeley,CA,USA,94720,2227 Piedmont Avenue,62467,artificial,outdoor,37.8707,-122.2508
+2a99aa05-f3ef-406f-99a8-3de7340dda61,Irwin Belk Complex,Charlotte,NC,USA,28216,500 N Summit Avenue,4500,turf,outdoor,35.2419,-80.8527
+7dc4adc9-2066-4a1a-ab91-782d3c9ae5d4,M.M. Roberts Stadium,Hattiesburg,MS,USA,39406,118 College Drive,36000,artificial,outdoor,31.3290,-89.3312
+bf0ee7a0-09ad-11ec-a067-9b4fd550fd6a,Sherman Field at Kearly Stadium,Houghton,MI,USA,49931,Sherman Field Press Box,3000,artificial,outdoor,47.1103,-88.5499
+280bf6ac-33d9-4e2c-a4bd-af2612f61d00,Hard Rock Stadium,Miami Gardens,FL,USA,33056,347 Don Shula Drive,65326,turf,outdoor,25.9583,-80.2396
+12b0ae84-0692-4a15-adea-09ae2e1c39f0,Pratt and Whitney Stadium at Rentschler Field,East Hartford,CT,USA,06118,615 Silver Lane,42704,turf,outdoor,41.7600,-72.6186
+1d2d7c40-a4b4-43ec-9463-c1fd1f483ce8,Alaska Airlines Field at Husky Stadium,Seattle,WA,USA,98105,3800 Montlake Boulevard NE,70083,artificial,outdoor,47.6503,-122.3021
+c6323dc8-9582-4a87-8c37-2ffb2a5fb548,Strawberry Stadium,Hammond,LA,USA,70402,910 North Hazel Street,7408,artificial,outdoor,30.5110,-90.4686
+1581135f-f4f3-4fc6-a492-ad3f42834a77,Sun Bowl,El Paso,TX,USA,79902,2701 Sun Bowl Drive,51500,artificial,outdoor,31.7733,-106.5079
+c1bdffac-1291-45aa-9e4c-546c1d0e0f30,Navy-Marine Corps Memorial Stadium,Annapolis,MD,USA,21401,550 Taylor Avenue,34000,artificial,outdoor,38.9848,-76.5071
+8ec1da62-b19b-41f8-8ca7-713ff86bbbdf,Mustang Memorial Field,San Luis Obispo,CA,USA,93407,1 Grand Avenue,11075,turf,outdoor,35.2984,-120.6651
+6e850f85-72c6-4760-9435-f3e5ff4d68c0,Pitbull Stadium,Miami,FL,USA,33199,11200 Southwest 8th Street,20000,artificial,outdoor,25.7525,-80.3779
+fd518168-c4f1-4f3c-9be3-45adc4e32102,Center Parc Stadium,Atlanta,GA,USA,30315,755 Hank Aaron Drive SE,24333,artificial,outdoor,33.7355,-84.3901
+0dd407aa-6083-4493-ba33-eb6d64f672fb,Armstrong Stadium,Hampton,VA,USA,23669,Marshall Avenue,12000,turf,outdoor,37.0205,-76.3336
+4bf5bdde-2d8d-4b86-88a2-770dc8adbab5,Sonny Lubick Field at Canvas Stadium,Fort Collins,CO,USA,80526,2011 South Overland Trail,41200,artificial,outdoor,40.5699,-105.0884
+5e4db3ce-14b1-4c91-a87e-850d62e83c96,Moglia Stadium at Jack Coffey Field,Bronx,NY,USA,10458,441 East Fordham Road,7000,artificial,outdoor,40.8615,-73.8829
+d99130a4-d546-48ca-9c11-9ab2ffd3d00a,Meade Stadium,Kingston,RI,USA,02881,Keaney Avenue,6555,turf,outdoor,41.4880,-71.5347
+249112d0-3965-4f2f-a110-2e137de9f1e5,The Reservation,Gaffney,SC,USA,29340,132 Administrative Drive,8250,turf,outdoor,35.0681,-81.6389
+811a4a98-cd29-4d1b-bf45-9f7e9e341cf8,SHI Stadium,Piscataway,NJ,USA,08854,1 Scarlet Knight Way,52454,artificial,outdoor,40.5136,-74.4653
+8177e010-d13d-11ec-87b2-27dc91b1d2fb,W.B. Mason Stadium,North Easton,MA,USA,02356,Blessed Basil Moreau Dr,2400,artificial,outdoor,42.0573,-71.0824
+9f8efea1-0b91-491e-a6b3-1adbddad8ded,Spartan Stadium,East Lansing,MI,USA,48824,325 West Shaw Lane,75005,turf,outdoor,42.7282,-84.4849
+910a54c9-d15f-4e40-a39e-ae20da947833,SECU Stadium,College Park,MD,USA,20742,90 Stadium Drive,51802,artificial,outdoor,38.9903,-76.9472
+e0753c00-ecb8-4850-8db3-3e78484754a8,Gibbs Stadium,Spartanburg,SC,USA,29303,429 North Church Street,13000,turf,outdoor,34.9619,-81.9331
+bd84c6aa-cafb-4ecf-b21f-44253c99c854,Shell Energy Stadium,Houston,TX,USA,77003,2200 Texas Avenue,22039,turf,outdoor,29.7522,-95.3523
+e2f5eaae-e0e8-45b4-8cd5-3d6f7d048220,Powers Field at Princeton Stadium,Princeton,NJ,USA,08540,45 Ivy Lane,27773,artificial,outdoor,40.3458,-74.6500
+8df5b87a-35b7-474b-afc0-fc2c17d033f0,Los Angeles Memorial Coliseum,Los Angeles,CA,USA,90037,3911 South Figueroa Street,77500,turf,outdoor,34.0137,-118.2878
+9c949dc9-c50d-4231-91b2-8b8d9a56e26e,Hillsboro Stadium,Hillsboro,OR,USA,97124,4450 NW 229th Avenue,7600,artificial,outdoor,45.5544,-122.9070
+516e0622-0fff-440e-8dd8-3bf49317b4bf,Duane Stadium,North Andover,MA,USA,01845,315 Turnpike St,4000,turf,outdoor,42.6663,-71.1202
+5b559a78-26ac-4b95-909e-4580b81ab7d9,Michigan Stadium,Ann Arbor,MI,USA,48104,1201 South Main Street,107601,artificial,outdoor,42.2658,-83.7487

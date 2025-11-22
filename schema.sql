@@ -1,21 +1,6 @@
 CREATE DATABASE ncaafb_db;
 USE ncaafb_db;
 
-CREATE TABLE TEAMS
-(
-    team_id VARCHAR(36) PRIMARY KEY,
-    market VARCHAR(100),
-    name VARCHAR(100),
-    alias VARCHAR(100),
-    founded SMALLINT,
-    mascot VARCHAR(100),
-    fight_song VARCHAR(100),
-    championships_won INT,
-    conference_id VARCHAR(36),
-    division_id VARCHAR(36),
-    venue_id VARCHAR(36)
-);
-
 CREATE TABLE VENUES
 (
     venue_id VARCHAR(36) PRIMARY KEY,
@@ -46,6 +31,26 @@ CREATE TABLE DIVISIONS
     alias VARCHAR(100)
 );
 
+CREATE TABLE TEAMS
+(
+    team_id VARCHAR(36) PRIMARY KEY,
+    market VARCHAR(100),
+    name VARCHAR(100),
+    alias VARCHAR(100),
+    founded SMALLINT,
+    mascot VARCHAR(100),
+    fight_song VARCHAR(100),
+    championships_won INT,
+    conference_id VARCHAR(36),
+    division_id VARCHAR(36),
+    venue_id VARCHAR(36),
+
+    FOREIGN KEY (venue_id) REFERENCES VENUES(venue_id),
+    FOREIGN KEY (conference_id) REFERENCES CONFERENCES(conference_id),
+    FOREIGN KEY (division_id) REFERENCES DIVISIONS(division_id)
+    
+);
+
 CREATE TABLE SEASONS
 (
     season_id VARCHAR(36) PRIMARY KEY,
@@ -55,38 +60,6 @@ CREATE TABLE SEASONS
     status VARCHAR(100),
     type_code VARCHAR(100)
 );
-
-CREATE TABLE PLAYERS
-(
-    player_id VARCHAR(36) PRIMARY KEY,
-    first_name VARCHAR(100),
-    last_name VARCHAR(100),
-    abbr_name VARCHAR(100),
-    birth_place VARCHAR(100),
-    position VARCHAR(100),
-    height INT,
-    weight INT,
-    status VARCHAR(100),
-    eligibility VARCHAR(100),
-    team_id VARCHAR(36)
-);
-
-CREATE TABLE PLAYER_STATISTICS
-(
-    stat_id INT AUTO_INCREMENT PRIMARY KEY,
-    player_id VARCHAR(36),
-    team_id VARCHAR(36),
-    season_id VARCHAR(36),
-    games_played INT,
-    games_started INT,
-    rushing_yards INT,
-    rushing_touchdowns INT,
-    receiving_yards INT,
-    receiving_touchdowns INT,
-    kick_return_yards INT,
-    fumbles INT
-);
-
 
 CREATE TABLE RANKINGS
 (
@@ -103,17 +76,61 @@ CREATE TABLE RANKINGS
     fp_votes INT,
     wins INT,
     losses INT,
-    ties INT
+    ties INT,
+
+    FOREIGN KEY (team_id) REFERENCES TEAMS(team_id),
+    FOREIGN KEY (season_id) REFERENCES SEASONS(season_id)
+
 );
 
+CREATE TABLE PLAYERS
+(
+    player_id VARCHAR(36) PRIMARY KEY,
+    first_name VARCHAR(100),
+    last_name VARCHAR(100),
+    abbr_name VARCHAR(100),
+    birth_place VARCHAR(100),
+    position VARCHAR(100),
+    height INT,
+    weight INT,
+    status VARCHAR(100),
+    eligibility VARCHAR(100),
+    team_id VARCHAR(36),
+
+    FOREIGN KEY (team_id) REFERENCES TEAMS(team_id)
+
+);
 
 CREATE TABLE COACHES
 (
     coach_id VARCHAR(100) PRIMARY KEY,
     full_name VARCHAR(100),
     position VARCHAR(100),
-    team_id VARCHAR(36)
+    team_id VARCHAR(36),
+
+    FOREIGN KEY (team_id) REFERENCES TEAMS(team_id)
 );
+
+CREATE TABLE PLAYER_STATISTICS
+(
+    stat_id INT AUTO_INCREMENT PRIMARY KEY,
+    player_id VARCHAR(36),
+    team_id VARCHAR(36),
+    season_id VARCHAR(36),
+    games_played INT,
+    games_started INT,
+    rushing_yards INT,
+    rushing_touchdowns INT,
+    receiving_yards INT,
+    receiving_touchdowns INT,
+    kick_return_yards INT,
+    fumbles INT,
+
+    FOREIGN KEY (team_id) REFERENCES TEAMS(team_id),
+    FOREIGN KEY (player_id) REFERENCES PLAYERS(player_id),
+    FOREIGN KEY (season_id) REFERENCES SEASONS(season_id)
+);
+
 
 
 
