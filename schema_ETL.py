@@ -23,6 +23,7 @@ USER_PASSWORD = "root"
 from sqlalchemy import create_engine, text
 from sqlalchemy.exc import SQLAlchemyError
 
+
 def _get(d, keys, default=None):
     """Safe nested dict getter: _get(d, ['a','b']) -> d['a']['b'] or default."""
     cur = d
@@ -32,6 +33,7 @@ def _get(d, keys, default=None):
         cur = cur[k]
     return cur
 
+
 def get_all_just_teams_id_list():
     print("fetching all teams id's..")
     teams = api_teams()
@@ -39,15 +41,19 @@ def get_all_just_teams_id_list():
     obj_to_file(teams_id, "./db_csv/teams_id_list")
     return teams_id
 
+
 def get_all_seasons_list():
     print("fetching all season's detail..")
     season_details = api_season_details()
-    season_list = season_details['seasons']
+    season_list = season_details["seasons"]
     obj_to_file(season_list, "./db_csv/seasons_list")
     return season_list
 
+
 def db_populate_seasons(season_list, engine):
-    seasons_df = pd.DataFrame(columns=["season_id", "year", "start_date", "end_date", "status", "type_code"])
+    seasons_df = pd.DataFrame(
+        columns=["season_id", "year", "start_date", "end_date", "status", "type_code"]
+    )
     for season in season_list:
         season_dict = {
             "season_id": _get(season, ["id"]),
@@ -58,15 +64,18 @@ def db_populate_seasons(season_list, engine):
             "type_code": _get(season, ["type", "code"]),
         }
 
-        if season_dict["season_id"] is not None and season_dict["season_id"] not in seasons_df["season_id"].values:
+        if (
+            season_dict["season_id"] is not None
+            and season_dict["season_id"] not in seasons_df["season_id"].values
+        ):
             seasons_df.loc[len(seasons_df)] = season_dict
-    
+
     seasons_df.to_sql("SEASONS", engine, index=False, if_exists="append")
     df_to_file(seasons_df, "./db_csv/SEASONS.csv")
     print("db updated: seasons.")
-    
-def get_all_teams_roaster_list(teams_id):
 
+
+def get_all_teams_roaster_list(teams_id):
     def _fetch_roaster(tid, max_retries=1, base_backoff=1.0):
         backoff = base_backoff
         for attempt in range(1, max_retries + 1):
@@ -84,8 +93,10 @@ def get_all_teams_roaster_list(teams_id):
                 return {"id": tid, "_error": msg}
 
             # api wrapper may return a dict with a 'message' or '_error'
-            if isinstance(res, dict) and (res.get("message") == "Too Many Requests" or
-                                        "Too Many Requests" in str(res.get("_error", ""))):
+            if isinstance(res, dict) and (
+                res.get("message") == "Too Many Requests"
+                or "Too Many Requests" in str(res.get("_error", ""))
+            ):
                 # if the API returned Retry-After in headers, use that (needs wrapper change to expose headers)
                 wait = backoff + random.uniform(0, 0.5)
                 time.sleep(wait)
@@ -110,105 +121,179 @@ def get_all_teams_roaster_list(teams_id):
     obj_to_file(roasters_list, "./db_csv/roasters_list")
     return roasters_list
 
-def db_populate_venues_divisons_confs_teams_coaches_players(roasters_list, engine):
 
-    venue_df = pd.DataFrame(columns=["venue_id", "name","city", "state", "country", "zip", "address", "capacity", "surface", "roof_type", "latitude", "longitude"])
+def db_populate_venues_divisons_confs_teams_coaches_players(roasters_list, engine):
+    venue_df = pd.DataFrame(
+        columns=[
+            "venue_id",
+            "name",
+            "city",
+            "state",
+            "country",
+            "zip",
+            "address",
+            "capacity",
+            "surface",
+            "roof_type",
+            "latitude",
+            "longitude",
+        ]
+    )
     conferene_df = pd.DataFrame(columns=["conference_id", "name", "alias"])
     divison_df = pd.DataFrame(columns=["division_id", "name", "alias"])
-    teams_df = pd.DataFrame(columns=['team_id', 'market', 'name', 'alias', 'founded', 'mascot', 'fight_song', 'championships_won', 'conference_id', 'division_id', 'venue_id'])
-    players_df = pd.DataFrame(columns=['player_id', 'first_name', 'last_name', 'abbr_name', 'birth_place', 'position', 'height', 'weight', 'status', 'eligibility', 'team_id'])
+    teams_df = pd.DataFrame(
+        columns=[
+            "team_id",
+            "market",
+            "name",
+            "alias",
+            "founded",
+            "mascot",
+            "fight_song",
+            "championships_won",
+            "conference_id",
+            "division_id",
+            "venue_id",
+        ]
+    )
+    players_df = pd.DataFrame(
+        columns=[
+            "player_id",
+            "first_name",
+            "last_name",
+            "abbr_name",
+            "birth_place",
+            "position",
+            "height",
+            "weight",
+            "status",
+            "eligibility",
+            "team_id",
+        ]
+    )
     coaches_df = pd.DataFrame(columns=["coach_id", "full_name", "position", "team_id"])
 
     for roaster in roasters_list:
         print(roaster)
-        if not isinstance(roaster, dict) or 'id' not in roaster:
+        if not isinstance(roaster, dict) or "id" not in roaster:
             continue
 
         venue_dict = {
-            'venue_id': _get(roaster, ['venue', 'id']),
-            'name': _get(roaster, ['venue', 'name']),
-            'city': _get(roaster, ['venue', 'city']),
-            'state': _get(roaster, ['venue', 'state']),
-            'country': _get(roaster, ['venue', 'country']),
-            'zip': _get(roaster, ['venue', 'zip']),
-            'address': _get(roaster, ['venue', 'address']),
-            'capacity': _get(roaster, ['venue', 'capacity']),
-            'surface': _get(roaster, ['venue', 'surface']),
-            'roof_type': _get(roaster, ['venue', 'roof_type']),
-            'latitude': _get(roaster, ['venue', 'location', 'lat']),
-            'longitude': _get(roaster, ['venue', 'location', 'lng']),
+            "venue_id": _get(roaster, ["venue", "id"]),
+            "name": _get(roaster, ["venue", "name"]),
+            "city": _get(roaster, ["venue", "city"]),
+            "state": _get(roaster, ["venue", "state"]),
+            "country": _get(roaster, ["venue", "country"]),
+            "zip": _get(roaster, ["venue", "zip"]),
+            "address": _get(roaster, ["venue", "address"]),
+            "capacity": _get(roaster, ["venue", "capacity"]),
+            "surface": _get(roaster, ["venue", "surface"]),
+            "roof_type": _get(roaster, ["venue", "roof_type"]),
+            "latitude": _get(roaster, ["venue", "location", "lat"]),
+            "longitude": _get(roaster, ["venue", "location", "lng"]),
         }
 
         conference_dict = {
-            'conference_id': _get(roaster, ['conference', 'id']),
-            'name': _get(roaster, ['conference', 'name']),
-            'alias': _get(roaster, ['conference', 'alias']),
+            "conference_id": _get(roaster, ["conference", "id"]),
+            "name": _get(roaster, ["conference", "name"]),
+            "alias": _get(roaster, ["conference", "alias"]),
         }
 
         division_dict = {
-            'division_id': _get(roaster, ['division', 'id']),
-            'name': _get(roaster, ['division', 'name']),
-            'alias': _get(roaster, ['division', 'alias']),
+            "division_id": _get(roaster, ["division", "id"]),
+            "name": _get(roaster, ["division", "name"]),
+            "alias": _get(roaster, ["division", "alias"]),
         }
 
         teams_dict = {
-            'team_id': _get(roaster, ['id']),
-            'market': _get(roaster, ['market']),
-            'name': _get(roaster, ['name']),
-            'alias': _get(roaster, ['alias']),
-            'founded': _get(roaster, ['founded']),
-            'mascot': _get(roaster, ['mascot']),
-            'fight_song': _get(roaster, ['fight_song']),
-            'championships_won': _get(roaster, ['championships_won']),
-            'conference_id': _get(roaster, ['conference', 'id']),
-            'division_id': _get(roaster, ['division', 'id']),
-            'venue_id': _get(roaster, ['venue', 'id']),
+            "team_id": _get(roaster, ["id"]),
+            "market": _get(roaster, ["market"]),
+            "name": _get(roaster, ["name"]),
+            "alias": _get(roaster, ["alias"]),
+            "founded": _get(roaster, ["founded"]),
+            "mascot": _get(roaster, ["mascot"]),
+            "fight_song": _get(roaster, ["fight_song"]),
+            "championships_won": _get(roaster, ["championships_won"]),
+            "conference_id": _get(roaster, ["conference", "id"]),
+            "division_id": _get(roaster, ["division", "id"]),
+            "venue_id": _get(roaster, ["venue", "id"]),
         }
 
         # Replacements to avoid FutureWarning:
-        if venue_dict['venue_id'] is not None and venue_dict['venue_id'] not in venue_df['venue_id'].values:
-            venue_df = pd.concat([venue_df, pd.DataFrame([venue_dict])], ignore_index=True)
+        if (
+            venue_dict["venue_id"] is not None
+            and venue_dict["venue_id"] not in venue_df["venue_id"].values
+        ):
+            venue_df = pd.concat(
+                [venue_df, pd.DataFrame([venue_dict])], ignore_index=True
+            )
 
-        if conference_dict['conference_id'] is not None and conference_dict['conference_id'] not in conferene_df['conference_id'].values:
-            conferene_df = pd.concat([conferene_df, pd.DataFrame([conference_dict])], ignore_index=True)
+        if (
+            conference_dict["conference_id"] is not None
+            and conference_dict["conference_id"]
+            not in conferene_df["conference_id"].values
+        ):
+            conferene_df = pd.concat(
+                [conferene_df, pd.DataFrame([conference_dict])], ignore_index=True
+            )
 
-        if division_dict['division_id'] is not None and division_dict['division_id'] not in divison_df['division_id'].values:
-            divison_df = pd.concat([divison_df, pd.DataFrame([division_dict])], ignore_index=True)
+        if (
+            division_dict["division_id"] is not None
+            and division_dict["division_id"] not in divison_df["division_id"].values
+        ):
+            divison_df = pd.concat(
+                [divison_df, pd.DataFrame([division_dict])], ignore_index=True
+            )
 
-        if teams_dict['team_id'] is not None and teams_dict['team_id'] not in teams_df['team_id'].values:
-            teams_df = pd.concat([teams_df, pd.DataFrame([teams_dict])], ignore_index=True)
-        
+        if (
+            teams_dict["team_id"] is not None
+            and teams_dict["team_id"] not in teams_df["team_id"].values
+        ):
+            teams_df = pd.concat(
+                [teams_df, pd.DataFrame([teams_dict])], ignore_index=True
+            )
+
         print("v|d|c|t done")
 
         # Coaches
-        for coach in roaster.get('coaches', []) or []:
+        for coach in roaster.get("coaches", []) or []:
             c = {
-                'coach_id': _get(coach, ['id']),
-                'full_name': _get(coach, ['full_name']),
-                'position': _get(coach, ['position']),
-                'team_id': teams_dict['team_id'],
+                "coach_id": _get(coach, ["id"]),
+                "full_name": _get(coach, ["full_name"]),
+                "position": _get(coach, ["position"]),
+                "team_id": teams_dict["team_id"],
             }
-            if c['coach_id'] is not None and c['coach_id'] not in coaches_df['coach_id'].values:
-                coaches_df = pd.concat([coaches_df, pd.DataFrame([c])], ignore_index=True)
+            if (
+                c["coach_id"] is not None
+                and c["coach_id"] not in coaches_df["coach_id"].values
+            ):
+                coaches_df = pd.concat(
+                    [coaches_df, pd.DataFrame([c])], ignore_index=True
+                )
             print("c done")
 
         # Players
-        for player in roaster.get('players', []) or []:
+        for player in roaster.get("players", []) or []:
             p = {
-                'player_id': _get(player, ['id']),
-                'first_name': _get(player, ['first_name']),
-                'last_name': _get(player, ['last_name']),
-                'abbr_name': _get(player, ['abbr_name']),
-                'birth_place': _get(player, ['birth_place']),
-                'position': _get(player, ['position']),
-                'height': _get(player, ['height']),
-                'weight': _get(player, ['weight']),
-                'status': _get(player, ['status']),
-                'eligibility': _get(player, ['eligibility']),
-                'team_id': teams_dict['team_id'],
+                "player_id": _get(player, ["id"]),
+                "first_name": _get(player, ["first_name"]),
+                "last_name": _get(player, ["last_name"]),
+                "abbr_name": _get(player, ["abbr_name"]),
+                "birth_place": _get(player, ["birth_place"]),
+                "position": _get(player, ["position"]),
+                "height": _get(player, ["height"]),
+                "weight": _get(player, ["weight"]),
+                "status": _get(player, ["status"]),
+                "eligibility": _get(player, ["eligibility"]),
+                "team_id": teams_dict["team_id"],
             }
-            if p['player_id'] is not None and p['player_id'] not in players_df['player_id'].values:
-                players_df = pd.concat([players_df, pd.DataFrame([p])], ignore_index=True)
+            if (
+                p["player_id"] is not None
+                and p["player_id"] not in players_df["player_id"].values
+            ):
+                players_df = pd.concat(
+                    [players_df, pd.DataFrame([p])], ignore_index=True
+                )
             print(" pdone")
 
     print("uploading to sql")
@@ -250,7 +335,7 @@ def get_player_profiles_list(players_id):
                 msg = str(e)
                 # backoff on rate limit-ish errors
                 if "Too Many Requests" in msg or "429" in msg:
-                    time.sleep((2 ** attempt) * 0.1 + 0.1)
+                    time.sleep((2**attempt) * 0.1 + 0.1)
                     continue
                 return {"player_id": pid, "_error": msg}
         return {"player_id": pid, "_error": "TooManyRequests_after_retries"}
@@ -264,15 +349,29 @@ def get_player_profiles_list(players_id):
             playerprof_list.append(fut.result())
             if i % 100 == 0 or i == len(players_id):
                 print(f"Fetched {i}/{len(players_id)}")
-    
+
     obj_to_file(playerprof_list, "./db_csv/players_profiles_list")
     return playerprof_list
 
-def db_populate_players_statistics(playerprof_list, engine):
 
-    playerstat_df = pd.DataFrame(columns=['player_id', 'team_id', 'season_id', 'games_played', 'games_started', 'rushing_yards', 'rushing_touchdowns', 'receiving_yards', 'receiving_touchdowns', 'kick_return_yards', 'fumbles'])
+def db_populate_players_statistics(playerprof_list, engine):
+    playerstat_df = pd.DataFrame(
+        columns=[
+            "player_id",
+            "team_id",
+            "season_id",
+            "games_played",
+            "games_started",
+            "rushing_yards",
+            "rushing_touchdowns",
+            "receiving_yards",
+            "receiving_touchdowns",
+            "kick_return_yards",
+            "fumbles",
+        ]
+    )
     for player in playerprof_list:
-        playerstat_dict = {key:None for key in playerstat_df.columns}
+        playerstat_dict = {key: None for key in playerstat_df.columns}
         playerstat_dict["player_id"] = _get(player, ["id"])
         playerstat_dict["team_id"] = _get(player, ["team", "id"])
         if _get(player, ["seasons"]) in [None, []]:
@@ -286,21 +385,42 @@ def db_populate_players_statistics(playerprof_list, engine):
                 continue
 
             for team in season["teams"]:
-                if playerstat_dict["team_id"] is not None and _get(team, ["id"]) == playerstat_dict["team_id"]:
+                if (
+                    playerstat_dict["team_id"] is not None
+                    and _get(team, ["id"]) == playerstat_dict["team_id"]
+                ):
                     playerstat_dict["team_id"] = _get(team, ["id"])
-                    playerstat_dict["games_played"] = _get(team, ["statistics", "games_played"])
-                    playerstat_dict["games_started"] = _get(team, ["statistics", "games_started"])
-                    playerstat_dict["rushing_yards"] = _get(team, ["statistics", "rushing", "yards"])
-                    playerstat_dict["rushing_touchdowns"] = _get(team, ["statistics", "rushing", "touchdowns"])
-                    playerstat_dict["receiving_yards"] = _get(team, ["statistics", "receiving", "yards"])
-                    playerstat_dict["receiving_touchdowns"] = _get(team, ["statistics", "receiving", "touchdowns"])
-                    playerstat_dict["kick_return_yards"] = _get(team, ["statistics", "kick_returns", "yards"])
-                    playerstat_dict["fumbles"] = _get(team, ["statistics", "fumbles", "fumbles"])
+                    playerstat_dict["games_played"] = _get(
+                        team, ["statistics", "games_played"]
+                    )
+                    playerstat_dict["games_started"] = _get(
+                        team, ["statistics", "games_started"]
+                    )
+                    playerstat_dict["rushing_yards"] = _get(
+                        team, ["statistics", "rushing", "yards"]
+                    )
+                    playerstat_dict["rushing_touchdowns"] = _get(
+                        team, ["statistics", "rushing", "touchdowns"]
+                    )
+                    playerstat_dict["receiving_yards"] = _get(
+                        team, ["statistics", "receiving", "yards"]
+                    )
+                    playerstat_dict["receiving_touchdowns"] = _get(
+                        team, ["statistics", "receiving", "touchdowns"]
+                    )
+                    playerstat_dict["kick_return_yards"] = _get(
+                        team, ["statistics", "kick_returns", "yards"]
+                    )
+                    playerstat_dict["fumbles"] = _get(
+                        team, ["statistics", "fumbles", "fumbles"]
+                    )
 
                     playerstat_df.loc[len(playerstat_df)] = playerstat_dict
-        
+
         df_to_file(playerstat_df, "./db_csv/PLAYER_STATISTICS.csv")
-        playerstat_df.to_sql("PLAYER_STATISTICS", engine, index=False, if_exists="append")
+        playerstat_df.to_sql(
+            "PLAYER_STATISTICS", engine, index=False, if_exists="append"
+        )
 
     print("db updated: player_statistics.")
 
@@ -309,12 +429,15 @@ def _apply_schema(engine_db):
     """Apply schema only if not already applied."""
     with engine_db.connect() as conn:
         # Check if schema version table exists
-        result = conn.execute(text("""
+        result = conn.execute(
+            text("""
             SELECT COUNT(*)
             FROM information_schema.tables
             WHERE table_schema = :db
               AND table_name = 'schema_version'
-        """), {"db": DB_NAME}).scalar()
+        """),
+            {"db": DB_NAME},
+        ).scalar()
 
         if result == 1:
             print("Schema already applied — skipping.")
@@ -323,7 +446,7 @@ def _apply_schema(engine_db):
     print(
         f"Applying schema to {DB_NAME}",
         f"Loading schema file from ./{SCHEMA_FILE}",
-        sep="\n"
+        sep="\n",
     )
 
     try:
@@ -334,11 +457,7 @@ def _apply_schema(engine_db):
         return
 
     # Split into SQL statements
-    statements = [
-        stmt.strip()
-        for stmt in sql_content.split(";")
-        if stmt.strip()
-    ]
+    statements = [stmt.strip() for stmt in sql_content.split(";") if stmt.strip()]
 
     with engine_db.connect() as conn:
         for stmt in statements:
@@ -348,17 +467,18 @@ def _apply_schema(engine_db):
                 print(f"Error executing statement:\n{stmt}\n{e}")
 
         # Mark schema as applied
-        conn.execute(text("""
+        conn.execute(
+            text("""
             CREATE TABLE IF NOT EXISTS schema_version (
                 id INT PRIMARY KEY AUTO_INCREMENT,
                 applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
-        """))
+        """)
+        )
 
         conn.execute(text("INSERT INTO schema_version () VALUES ()"))
 
     print("Schema applied successfully.")
-
 
 
 def ensure_database():
@@ -368,7 +488,8 @@ def ensure_database():
     server_engine = create_engine(server_url)
 
     with server_engine.connect() as conn:
-        conn.execute(text(
+        conn.execute(
+            text(
                 f"CREATE DATABASE IF NOT EXISTS `{DB_NAME}` "
                 "CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci"
             )
@@ -397,10 +518,10 @@ def main():
     # load teams's ids from file and get all team's roaster details
     teams_id = file_to_obj("./db_csv/teams_id_list")
     get_all_teams_roaster_list(teams_id)
-    
+
     # load all teams roasters from file and upload to database
     roasters_list = file_to_obj("./db_csv/roasters_list")
-    db_populate_venues_divisons_confs_teams_coaches_players(roasters_list, engine)  
+    db_populate_venues_divisons_confs_teams_coaches_players(roasters_list, engine)
 
     # load player's ids from file and get player stats
     players_ids = file_to_obj("./db_csv/players_ids")
@@ -413,3 +534,46 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+# def ensure_database_and_schema():
+#     """Ensure database exists and schema is applied. Executes schema.sql if necessary."""
+#     # Connect to server (no DB)
+#     engine = get_engine(None)
+#     with engine.connect() as conn:
+#         # create database if not exists
+#         conn.execute(text(f"CREATE DATABASE IF NOT EXISTS `{DB_NAME}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"))
+#         conn.commit()
+
+#     # Connect to target DB and check if tables exist; if not, run schema
+#     engine_db = get_engine(DB_NAME)
+#     with engine_db.connect() as conn:
+#         # check for any table
+#         result = conn.execute(text("SELECT COUNT(*) as c FROM information_schema.tables WHERE table_schema = :schema"), {"schema": DB_NAME})
+#         count = result.mappings().first()["c"]
+#         if count == 0:
+#             # load schema file and execute
+#             if not os.path.exists(SCHEMA_PATH):
+#                 st.error(f"Schema file not found at {SCHEMA_PATH}")
+#                 return False
+#             with open(SCHEMA_PATH, "r", encoding="utf-8") as f:
+#                 schema_sql = f.read()
+#             # naive split by ; to execute statements safely; preserve DELIMITER statements
+#             statements = [s.strip() for s in schema_sql.split(';') if s.strip()]
+#             for stmt in statements:
+#                 try:
+#                     conn.execute(text(stmt))
+#                 except Exception as e:
+#                     # ignore statements that cannot run alone (e.g., DELIMITER-related or comments)
+#                     print("Schema execution error for statement chunk:", e)
+#             conn.commit()
+#             st.info("Database schema initialized from schema.sql")
+#         else:
+#             st.info("Database already contains tables - skipping schema initialization")
+#     return True
+
+# Ensure DB and schema
+# with st.spinner("Checking database and schema..."):
+#     ok = ensure_database_and_schema()
+#     if not ok:
+#         st.stop()
