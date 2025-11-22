@@ -1,11 +1,11 @@
-# Sportradar Dashboard
+# Sportradar NCAAFB Dashboard
 
 <img src="artifacts/ncaa_fb.svg" width="200" alt="NCAA football logo">
 
 ## Overview
 NCAA football dashboard: a compact 4-day project for ETL of API data into MySQL and a Streamlit frontend. Key features include AI-assisted data retrievals from MySQL and contextual filter/search on each page.
 
-## Tools, APIs and Libraries
+## API & Tech stack
 
 ### API
 - [Sportradar NCAA Marketplace](https://raw.githubusercontent.com/vabsalack/NCAA_FootBall_DashBoard_AI_Powered/6db535bf53a104515f5812b09cfd1fd03a8e3c8a/artifacts/ncaa_fb.svg)
@@ -29,7 +29,7 @@ NCAA football dashboard: a compact 4-day project for ETL of API data into MySQL 
 ## ETL data and ER diagram
 - All teams id's were collected from /teams end point and rest were derived from it.
 
-<img src="artifacts/schema.svg" width="600" alt="ER diagram">
+<img src="https://raw.githubusercontent.com/vabsalack/NCAA_FootBall_DashBoard_AI_Powered/47e876bafe7d76e746361db2d0be3cdb3f91b1d3/artifacts/schema.svg" width="600" alt="ER diagram">
 
 ## Core pages
 1. AI-assisted search  
