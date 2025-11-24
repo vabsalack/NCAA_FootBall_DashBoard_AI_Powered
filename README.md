@@ -10,6 +10,8 @@ NCAA football dashboard: a compact 4-day project for ETL of API data into MySQL 
 ### API
 - [Sportradar NCAA Marketplace](https://raw.githubusercontent.com/vabsalack/NCAA_FootBall_DashBoard_AI_Powered/6db535bf53a104515f5812b09cfd1fd03a8e3c8a/artifacts/ncaa_fb.svg)
 
+- Since it were a trial API, Extracted and Transformed data were saved under `/db_csv` directory.
+
 ### Language / Runtime
 - Python >= 3.11 (streamlit compatible version on linux)
 

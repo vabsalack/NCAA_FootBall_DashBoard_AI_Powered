@@ -2,6 +2,7 @@ from api_endpoints import api_teams
 from api_endpoints import api_team_roasters
 from api_endpoints import api_season_details
 from api_endpoints import api_player_profile
+from api_endpoints import api_ranking
 
 from util import obj_to_file
 from util import file_to_obj
@@ -9,6 +10,8 @@ from util import df_to_file
 from util import file_to_df
 
 import time
+
+from util import to_mysql_timestamp
 
 import pandas as pd
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -423,6 +426,51 @@ def db_populate_players_statistics(playerprof_list, engine):
         )
 
     print("db updated: player_statistics.")
+
+
+def get_current_week_rankings():
+    return [api_ranking()]
+
+
+def db_populate_rankings(week_rankings, engine):
+    rank_curr_week_df = pd.DataFrame(columns=["ranking_id", 
+                                             "poll_id", 
+                                             "poll_name",
+                                             "season_id",
+                                             "week",
+                                             "effective_time",
+                                             "team_id",
+                                             "rank_position",
+                                             "prev_rank",
+                                             "points",
+                                             "fp_votes",
+                                             "wins",
+                                             "losses",
+                                             "ties"])
+    # 754e4990-efc7-11ef-bb2a-5d2d22b9215e
+    rank_dict = {key:None for key in rank_curr_week_df.columns}
+    rank_dict["season_id"] = "754e4990-efc7-11ef-bb2a-5d2d22b9215e"
+
+    for week_rank in week_rankings:
+        for team_rank in _get(week_rank, ["rankings"]):
+            rank_dict["poll_id"] = _get(week_rank, ["poll", "id"])
+            rank_dict["poll_name"] = _get(week_rank, ["poll", "name"])
+            rank_dict["week"] = _get(week_rank, ["week"])
+            rank_dict["effective_time"] = to_mysql_timestamp(_get(week_rank, ["effective_time"]))
+            rank_dict["team_id"] = _get(team_rank, ["id"])
+            rank_dict["rank_position"] = _get(team_rank, ["rank"])
+            rank_dict["prev_rank"] = _get(team_rank, ["prev_rank"])
+            rank_dict["points"] = _get(team_rank, ["points"])
+            rank_dict["fp_votes"] = _get(team_rank, ["fp_votes"])
+            rank_dict["wins"] = _get(team_rank, ["wins"])
+            rank_dict["losses"] = _get(team_rank, ["losses"])
+            rank_dict["ties"] = _get(team_rank, ["ties"])
+            rank_curr_week_df.loc[len(rank_curr_week_df)] = rank_dict
+    
+    df_to_file(rank_curr_week_df, "./db_csv/RANKINGS.csv")
+    print("RANKINGS.csv file saved")
+    rank_curr_week_df.to_sql("RANKINGS", engine, index=False, if_exists="append")
+    print("db updated: rankings")
 
 
 def _apply_schema(engine_db):

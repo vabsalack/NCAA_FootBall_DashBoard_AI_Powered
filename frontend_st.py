@@ -4,12 +4,18 @@ import pandas as pd
 import streamlit as st
 import plotly.express as px
 
+from phi.agent import Agent
+from phi.tools.sql import SQLTools
+from phi.model.openai import OpenAIChat 
+
 
 DB_PORT = int(os.getenv("DB_PORT", 3306))
 DB_NAME = "ncaafb_db"
 DB_HOST = "localhost"
 DB_USER = "root"
 DB_PASS = "root"
+
+GPT_API_KEY = "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"
 
 st.set_page_config(page_title="NCAAFB Dash Board", layout="wide")
 
@@ -33,9 +39,55 @@ def run_query(df_query: str, params: dict = None) -> pd.DataFrame:
         df = pd.read_sql_query(text(df_query), conn, params=params)
     return df
 
+# --- Your function rewritten as a Streamlit page ---
+def ai_query():
+
+    st.header("AI Querier")
+    st.write("Ask questions about the database in plain English. I will generate and run an SQL query to answer.")
+
+    # --- Preserve your original variables ---
+    url = f"mysql+mysqlconnector://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}?charset=utf8mb4"
+    os.environ["OPENAI_API_KEY"] = GPT_API_KEY
+
+    instruct = """
+    You are a helpful assistant with access to a SQL database.  
+    Your ONLY source of knowledge is the SQL database connected to you. 
+    You must NOT use any external information, general world knowledge, 
+    or assumptions beyond what is stored in the database.
+
+    Rules:
+    1. Translate the user question into an appropriate SQL query.
+    2. Execute the query on the database.
+    3. Use only the SQL results to generate your answer.
+    4. If unable to answer, say 'sorry, could not find the proper solution.'
+    """
+
+    agent = Agent(
+        tools=[SQLTools(db_url=url)],
+        llm=OpenAIChat(model="gpt-4o-mini", open_api_key=GPT_API_KEY),
+        instructions=instruct
+    )
+
+    user_query = st.text_input("Your question:", placeholder="Ask something about the database...")
+
+    if st.button("Submit"):
+        if user_query.strip() == "":
+            st.warning("Please enter a question.")
+            return
+        
+        # Stream response
+        with st.container():
+            st.write("### Response:")
+            response_holder = st.empty()
+
+            # Capture streaming output manually
+            for chunk in agent.print_response(user_query, markdown=True, stream=True):
+                response_holder.markdown(chunk)
+
+
 
 def home_page():
-    st.header("Home — NCAAFB Overview")
+    st.header("Home NCAAFB Overview")
 
     # Quick counts and tables
     col1, col2, col3 = st.columns(3)
@@ -350,6 +402,7 @@ def coaches_page():
 
 
 PAGES = {
+    "AI Query": ai_query,
     "Home": home_page,
     "Teams Explorer": teams_explorer,
     "Players Explorer": players_explorer,

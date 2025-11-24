@@ -1,5 +1,7 @@
 import json
 import pandas as pd
+from datetime import datetime
+
 
 import pickle
 
@@ -44,3 +46,15 @@ def file_to_df(file_path: str, fmt: str = "csv") -> pd.DataFrame:
 
     if fmt == "csv":
         return pd.read_csv(file_path)
+    
+def to_mysql_timestamp(param_str):
+    if param_str is None: return None
+    # Extract the value between quotes
+    value = param_str.strip().strip('"')
+    
+    # Parse ISO 8601 datetime with timezone
+    dt = datetime.fromisoformat(value)
+    
+    # Convert to MySQL timestamp (UTC or local, depending on your needs)
+    return dt.strftime("%Y-%m-%d %H:%M:%S")
+
