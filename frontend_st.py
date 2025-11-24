@@ -310,14 +310,14 @@ def rankings_page():
     if week_sel:
         where.append("r.week = :w")
         params["w"] = int(week_sel)
-    where.append("r.rank BETWEEN :r1 AND :r2")
+    where.append("r.rank_position BETWEEN :r1 AND :r2")
     params["r1"] = int(rank_range[0])
     params["r2"] = int(rank_range[1])
 
-    sql = "SELECT r.week, t.name as team_name, r.rank, r.points, r.fp_votes, r.wins, r.losses FROM RANKINGS r LEFT JOIN TEAMS t ON r.team_id = t.team_id"
+    sql = "SELECT r.week, t.name as team_name, r.rank_position, r.points, r.fp_votes, r.wins, r.losses FROM RANKINGS r LEFT JOIN TEAMS t ON r.team_id = t.team_id"
     if where:
         sql += " WHERE " + " AND ".join(where)
-    sql += " ORDER BY r.week, r.rank"
+    sql += " ORDER BY r.week, r.rank_position"
 
     df = run_query(sql, params)
     st.dataframe(df)
@@ -337,7 +337,7 @@ def rankings_page():
     if team_choice:
         tid = team_list.loc[team_list["name"] == team_choice, "team_id"].iloc[0]
         hist = run_query(
-            "SELECT s.year, r.week, r.rank, r.points FROM RANKINGS r JOIN seasons s ON r.season_id = s.season_id WHERE r.team_id = :tid ORDER BY s.year, r.week",
+            "SELECT s.year, r.week, r.rank_position, r.points FROM RANKINGS r JOIN seasons s ON r.season_id = s.season_id WHERE r.team_id = :tid ORDER BY s.year, r.week",
             {"tid": tid},
         )
         if not hist.empty:
