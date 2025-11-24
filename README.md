@@ -43,6 +43,13 @@ NCAA football dashboard: a compact 4-day project for ETL of API data into MySQL 
 7. Venues  
 8. Coaches
 
+| | |
+|---|---|
+| ![Home](artifacts/home.png) | ![AI Search](artifacts/ai_querier.png) |
+| ![Team Explorer](artifacts/teams.png) | ![Players Explorer](artifacts/player_stats.png) |
+| ![Season Viewer](artifacts/seasons.png) | ![Rankings](artifacts/rankings.png) |
+| ![Venues](artifacts/venues.png) | ![Coaches](artifacts/coaches.png) |
+
 ## Getting started
 1. Create virtual environment:  
      - `uv init`
